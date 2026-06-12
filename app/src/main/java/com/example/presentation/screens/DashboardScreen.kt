@@ -58,6 +58,7 @@ fun DashboardScreen(
     var showBudgetControlDialog by remember { mutableStateOf(false) }
     var showGoalControlDialog by remember { mutableStateOf(false) }
     var editingTxFromRecent by remember { mutableStateOf<TransactionWithDetails?>(null) }
+    var showEditBalanceDialog by remember { mutableStateOf(false) }
 
     // Aggregate monthly statistics
     val (totalBalance, monthlyIncome, monthlyExpense) = remember(accounts, transactions) {
@@ -214,15 +215,27 @@ fun DashboardScreen(
                             }
                         }
                         
-                        Text(
-                            text = "$currencySymbol${String.format(Locale.US, "%,.2f", totalBalance)}",
-                            fontSize = 32.sp,
-                            fontWeight = FontWeight.Black,
-                            color = Color.White,
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .testTag("dashboard_total_balance")
+                                .clickable { showEditBalanceDialog = true }
                                 .padding(vertical = 4.dp)
-                        )
+                        ) {
+                            Text(
+                                text = "$currencySymbol${String.format(Locale.US, "%,.2f", totalBalance)}",
+                                fontSize = 32.sp,
+                                fontWeight = FontWeight.Black,
+                                color = Color.White,
+                                modifier = Modifier.testTag("dashboard_total_balance")
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Icon(
+                                imageVector = Icons.Default.Edit,
+                                contentDescription = "Edit Balance",
+                                tint = Color.White.copy(alpha = 0.82f),
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(16.dp))
 
@@ -528,6 +541,83 @@ fun DashboardScreen(
                 viewModel.deleteTransaction(orig.id)
                 editingTxFromRecent = null
                 Toast.makeText(context, "Cleared from DB.", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    // Edit Total Balance Dialog overlay
+    if (showEditBalanceDialog) {
+        var balanceInput by remember { mutableStateOf(totalBalance.toString()) }
+        AlertDialog(
+            onDismissRequest = { showEditBalanceDialog = false },
+            title = { Text("Edit Total Balance", fontWeight = FontWeight.Bold) },
+            text = {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    Text(
+                        text = "Set a new value for your total balance. This will adjust the balance of your primary account to match the total.",
+                        fontSize = 13.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    OutlinedTextField(
+                        value = balanceInput,
+                        onValueChange = { balanceInput = it },
+                        label = { Text("Total Balance ($currencySymbol)") },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth().testTag("edit_total_balance_input")
+                    )
+                    if (accounts.isNotEmpty()) {
+                        val firstAcc = accounts.first()
+                        Text(
+                            text = "Account to adjust: ${firstAcc.name} (Current: $currencySymbol${firstAcc.balance})",
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    } else {
+                        Text(
+                            text = "This will create a primary cash account to hold the balance.",
+                            fontSize = 11.sp,
+                            color = MaterialTheme.colorScheme.primary,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        val newTotal = balanceInput.toDoubleOrNull()
+                        if (newTotal != null) {
+                            if (accounts.isEmpty()) {
+                                // Create a primary account
+                                viewModel.addAccount("Cash", "CASH", newTotal, "payments", 0xFF2ECC71.toInt())
+                            } else {
+                                val firstAcc = accounts.first()
+                                val diff = newTotal - totalBalance
+                                val updatedBalance = firstAcc.balance + diff
+                                viewModel.editAccount(
+                                    id = firstAcc.id,
+                                    name = firstAcc.name,
+                                    type = firstAcc.type,
+                                    balance = updatedBalance,
+                                    icon = firstAcc.icon,
+                                    color = firstAcc.color
+                                )
+                            }
+                            showEditBalanceDialog = false
+                            Toast.makeText(context, "Balance adjusted successfully!", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "Please enter a valid numeric value.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                ) {
+                    Text("Save")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditBalanceDialog = false }) {
+                    Text("Cancel")
+                }
             }
         )
     }
