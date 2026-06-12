@@ -1,0 +1,6 @@
+{
+  "name": "My Wallet",
+  "description": "Complete local-first personal finance and premium personal budgeting tracker application.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

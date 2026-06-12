@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Credit card peeking from behind -->
+    <path
+        android:fillColor="#E0E7FF"
+        android:pathData="M36,32 C36,30 38,28 40,28 H68 C70,28 72,30 72,32 V36 H36 Z" />
+    
+    <!-- Main wallet body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,36 C28,33.5 30.5,31 33,31 H75 C77.5,31 80,33.5 80,36 V72 C80,74.5 77.5,77 75,77 H33 C30.5,77 28,74.5 28,72 Z" />
+        
+    <!-- Wallet flap -->
+    <path
+        android:fillColor="#EEF2FF"
+        android:pathData="M60,46 C60,43.5 62.5,41 65,41 H80 V63 H65 C62.5,63 60,60.5 60,58 Z" />
+        
+    <!-- Clasp button -->
+    <path
+        android:fillColor="#4F46E5"
+        android:pathData="M66,52 C66,50.3 67.3,49 69,49 C70.7,49 72,50.3 72,52 C72,53.7 70.7,55 69,55 C67.3,55 66,53.7 66,52 Z" />
+        
+    <!-- Decorative star spark on the upper right -->
+    <path
+        android:fillColor="#FCD34D"
+        android:pathData="M81,25 L83,29 L87,31 L83,33 L81,37 L79,33 L75,31 L79,29 Z" />
+</vector>
