@@ -283,7 +283,7 @@ fun DashboardScreen(
                     onClick = { showQuickTransferDialog = true }
                 )
                 DashboardActionItem(
-                    label = "Accounts Vault",
+                    label = "Accounts",
                     icon = Icons.Default.AccountBalance,
                     tag = "navigate_accounts_btn",
                     modifier = Modifier.weight(1f),
@@ -490,7 +490,7 @@ fun DashboardScreen(
             onSave = { type, amt, accId, toAccId, catId, date, note, tags ->
                 viewModel.addTransaction(amt, type, accId, toAccId, catId, date, note, tags)
                 showQuickAddDialog = false
-                Toast.makeText(context, "Logged in Vault!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Logged successfully!", Toast.LENGTH_SHORT).show()
             }
         )
     }

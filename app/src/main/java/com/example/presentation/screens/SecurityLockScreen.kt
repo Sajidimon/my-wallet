@@ -72,7 +72,7 @@ fun SecurityLockScreen(
             )
 
             Text(
-                text = "Secure Vault Lock",
+                text = "Secure Lock",
                 color = Color.White,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,

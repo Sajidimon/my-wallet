@@ -201,7 +201,7 @@ fun SettingsScreen(
                 Column {
                     SettingsRowToggle(
                         icon = Icons.Default.Lock,
-                        title = "Vault Access PIN",
+                        title = "Access PIN",
                         subtitle = if (pinProtected) "Lock active (Requires 4-digit PIN)" else "Inactive (Unsecured access)",
                         checked = pinProtected,
                         onCheckedChange = { enable ->
@@ -259,7 +259,7 @@ fun SettingsScreen(
 
                     SettingsRowClick(
                         icon = Icons.Default.Backup,
-                        title = "Vault Sync Backups",
+                        title = "Sync Backups",
                         subtitle = "Backup or restore database values via JSON string",
                         onClick = { showBackupDialog = true },
                         tag = "json_backup_button"
@@ -343,7 +343,7 @@ fun SettingsScreen(
                 showPinDialog = false
                 viewModel.pinProtected.value = viewModel.settingsService.isAppLockEnabled() // revert state if dismissed
             },
-            title = { Text("Setup Vault Lock PIN", fontWeight = FontWeight.Bold) },
+            title = { Text("Setup Lock PIN", fontWeight = FontWeight.Bold) },
             text = {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -402,14 +402,14 @@ fun SettingsScreen(
         )
     }
 
-    // Vault Sync Backups Dialog
+    // Sync Backups Dialog
     if (showBackupDialog) {
         var backupText by remember { mutableStateOf("") }
         var showImportBox by remember { mutableStateOf(false) }
 
         AlertDialog(
             onDismissRequest = { showBackupDialog = false },
-            title = { Text("Vault Sync Backups", fontWeight = FontWeight.Bold) },
+            title = { Text("Sync Backups", fontWeight = FontWeight.Bold) },
             text = {
                 Column(
                     modifier = Modifier.fillMaxWidth(),
@@ -482,7 +482,7 @@ fun SettingsScreen(
                                     } else {
                                         viewModel.restoreData(backupText) { success ->
                                             if (success) {
-                                                Toast.makeText(context, "All Vault records restored successfully!", Toast.LENGTH_LONG).show()
+                                                Toast.makeText(context, "All records restored successfully!", Toast.LENGTH_LONG).show()
                                                 showBackupDialog = false
                                             } else {
                                                 Toast.makeText(context, "Invalid JSON structure. Import aborted.", Toast.LENGTH_LONG).show()

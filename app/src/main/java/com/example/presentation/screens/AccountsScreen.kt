@@ -44,7 +44,7 @@ fun AccountsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Accounts Vault", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
+                title = { Text("Accounts", fontWeight = FontWeight.Bold, fontSize = 20.sp) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "Go back")
